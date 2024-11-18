@@ -8,7 +8,7 @@
 
 int main() {
     spdlog::info("Initializing BlockWorld");
-    RendererProvider::setRendererBackend(RendererBackend::OpenGL);
+    RendererProvider::setRendererBackend(RendererBackend::NONE);
 
     std::unique_ptr<IWindow> window = RendererProvider::createWindow();
     window->initialize(1280, 720, "BlockWorld");

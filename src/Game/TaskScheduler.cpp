@@ -6,7 +6,9 @@ void TaskScheduler::initialize(const char *name, const int numWorkers) {
     this->name = name;
     this->numWorkers = numWorkers;
     for (int i = 0; i < numWorkers; i++) {
-        workers.push_back(std::thread(workerThread, this));
+        workers.emplace_back([this] {
+            workerThread();
+        });
     }
 }
 

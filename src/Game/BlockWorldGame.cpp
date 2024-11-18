@@ -3,6 +3,7 @@
 #include "TaskScheduler.h"
 #include "../UI/GUI.h"
 #include "../Input/InputManager.h"
+#include "../Renderer/Empty/EWindow.h"
 
 BlockWorldGame::BlockWorldGame(IWindow *window) : window(window), gui(nullptr) {
     // Initialize class members
@@ -35,6 +36,10 @@ BlockWorldGame::~BlockWorldGame() {
 
     // Destroy the world
     destroyWorld();
+
+    // Delete GUI and camera
+    delete camera;
+    delete gui;
 }
 
 void BlockWorldGame::run() {
@@ -52,6 +57,11 @@ void BlockWorldGame::run() {
             fps = static_cast<float>(frameCount) / deltaTime.count();
             frameCount = 0;
             lastTime = currentTime;
+        }
+
+        // In case of EWindow, allow terminal input
+        if (auto *eWindow = dynamic_cast<EWindow*>(window)) {
+            eWindow->interactWithTerminal(world);
         }
 
         // Poll events

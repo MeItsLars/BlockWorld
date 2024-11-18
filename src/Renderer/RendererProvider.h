@@ -6,12 +6,16 @@
 #include "OpenGL/GLRenderable.h"
 #include "OpenGL/GLShader.h"
 #include "OpenGL/GLWindow.h"
+#include "Empty/ERenderable.h"
+#include "Empty/EShader.h"
+#include "Empty/EWindow.h"
 #include "spdlog/spdlog.h"
 
 enum class RendererBackend {
-    OpenGL,
-    // Vulkan,
-    // DirectX,
+    NONE,
+    OPEN_GL,
+    // VULKAN,
+    // DIRECT_X,
 };
 
 class RendererProvider {
@@ -23,7 +27,10 @@ public:
     static void setRendererBackend(const RendererBackend backend) {
         renderBackend = backend;
         switch (backend) {
-            case RendererBackend::OpenGL:
+            case RendererBackend::NONE:
+                spdlog::info("Renderer backend set to None");
+                break;
+            case RendererBackend::OPEN_GL:
                 spdlog::info("Renderer backend set to OpenGL");
                 break;
             default:
@@ -34,7 +41,9 @@ public:
 
     static std::unique_ptr<IWindow> createWindow() {
         switch (renderBackend) {
-            case RendererBackend::OpenGL:
+            case RendererBackend::NONE:
+                return std::make_unique<EWindow>();
+            case RendererBackend::OPEN_GL:
                 return std::make_unique<GLWindow>();
             default:
                 spdlog::error("Invalid renderer backend when creating window");
@@ -44,7 +53,9 @@ public:
 
     static std::shared_ptr<IShader> createShader() {
         switch (renderBackend) {
-            case RendererBackend::OpenGL:
+            case RendererBackend::NONE:
+                return std::make_shared<EShader>();
+            case RendererBackend::OPEN_GL:
                 return std::make_shared<GLShader>();
             default:
                 spdlog::error("Invalid renderer backend when creating shader");
@@ -54,7 +65,9 @@ public:
 
     static std::unique_ptr<IRenderable> createRenderable() {
         switch (renderBackend) {
-            case RendererBackend::OpenGL:
+            case RendererBackend::NONE:
+                return std::make_unique<ERenderable>();
+            case RendererBackend::OPEN_GL:
                 return std::make_unique<GLRenderable>();
             default:
                 spdlog::error("Invalid renderer backend when creating renderable");

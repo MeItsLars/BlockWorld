@@ -3,25 +3,6 @@
 #include "ObjectChecker.h"
 #include "../Game/BlockWorldGame.h"
 
-// On windows..
-#ifdef _WIN32
-#include <windows.h>
-#include <psapi.h>
-#include <iostream>
-
-size_t getUsedMemory() {
-    PROCESS_MEMORY_COUNTERS pmc;
-    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
-        return pmc.WorkingSetSize;
-    }
-    return 0;
-}
-#else
-size_t getUsedMemory() {
-    return 0;
-}
-#endif
-
 GUI::GUI(BlockWorldGame *blockWorldGame) {
     spdlog::info("Creating GUI instance");
     this->game = blockWorldGame;
@@ -240,18 +221,18 @@ void GUI::drawGUI() {
 
     if (ImGui::CollapsingHeader("Game Info", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text("FPS: %.2f", game->getFPS());
-        ImGui::Text("Memory: %llu MB", getUsedMemory() / 1024 / 1024);
+        ImGui::Text("Memory: %lu MB", getUsedMemory() / 1024 / 1024);
         std::string vsyncText = "VSync: " + std::string(game->getWindow()->isVSync() ? "On" : "Off");
         if (ImGui::Button(vsyncText.c_str())) {
             game->getWindow()->setVSync(!game->getWindow()->isVSync());
         }
-        ImGui::Text("Vertex count: %llu", game->getVertexCount());
+        ImGui::Text("Vertex count: %lu", game->getVertexCount());
     }
 
     int renderDistance = game->getActiveWorld()->getRenderDistance();
     if (ImGui::CollapsingHeader("World", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text("WSPS: %.2f", game->getActiveWorld()->getChunkManager()->getWsps());
-        ImGui::Text("Chunks loaded: %llu", game->getActiveWorld()->getChunkManager()->getActiveChunkCount());
+        ImGui::Text("Chunks loaded: %lu", game->getActiveWorld()->getChunkManager()->getActiveChunkCount());
         if (ImGui::SliderInt("Render distance", &renderDistance, 1, 76)) {
             game->getActiveWorld()->setRenderDistance(renderDistance);
         }

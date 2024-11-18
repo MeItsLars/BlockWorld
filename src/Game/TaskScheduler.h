@@ -29,9 +29,7 @@ class TaskScheduler {
 public:
     TaskScheduler() = default;
 
-    ~TaskScheduler() {
-        stop();
-    }
+    ~TaskScheduler() = default;
 
     void initialize(const char *name, int numWorkers);
 

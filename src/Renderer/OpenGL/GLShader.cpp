@@ -104,8 +104,12 @@ void GLShader::load(const ShaderProgramInfo &shaderInfo) {
     programId = glCreateProgram();
 
     // Compile shaders
-    glAttachShader(programId, compileShader(GL_VERTEX_SHADER, shaderInfo.vertexSource));
-    glAttachShader(programId, compileShader(GL_FRAGMENT_SHADER, shaderInfo.fragmentSource));
+    const GLuint vertexShader = compileShader(GL_VERTEX_SHADER, shaderInfo.vertexSource);
+    glAttachShader(programId, vertexShader);
+    glDeleteShader(vertexShader);
+    const GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, shaderInfo.fragmentSource);
+    glAttachShader(programId, fragmentShader);
+    glDeleteShader(fragmentShader);
 
     // Link shaders
     glLinkProgram(programId);
@@ -130,7 +134,9 @@ void GLShader::load(const ShaderProgramInfo &shaderInfo) {
 }
 
 GLShader::~GLShader() {
-    if (textureId != 0) glDeleteTextures(1, &textureId);
+    if (textureId != 0) {
+        glDeleteTextures(1, &textureId);
+    }
     glDeleteProgram(programId);
 }
 
