@@ -67,12 +67,12 @@ void SubChunk::updateMesh() {
         //     fst == NUM_SUBCHUNKS - 1 ? nullptr : subChunks[fst + 1],
         //     fst == 0 ? nullptr : subChunks[fst - 1]
         // );
-        // east = chunk->getWorld()->getChunkManager()->getSubChunk(sx + 1, sy, sz);
-        // west = chunk->getWorld()->getChunkManager()->getSubChunk(sx - 1, sy, sz);
-        // up = chunk->getSubChunk(sy + 1);
-        // down = chunk->getSubChunk(sy - 1);
-        // north = chunk->getWorld()->getChunkManager()->getSubChunk(sx, sy, sz - 1);
-        // south = chunk->getWorld()->getChunkManager()->getSubChunk(sx, sy, sz + 1);
+        east = chunk->getWorld()->getChunkManager()->getSubChunk(sx + 1, sy, sz);
+        west = chunk->getWorld()->getChunkManager()->getSubChunk(sx - 1, sy, sz);
+        up = chunk->getSubChunk(sy + 1);
+        down = chunk->getSubChunk(sy - 1);
+        north = chunk->getWorld()->getChunkManager()->getSubChunk(sx, sy, sz - 1);
+        south = chunk->getWorld()->getChunkManager()->getSubChunk(sx, sy, sz + 1);
     }
 
     auto mesh = std::make_unique<Mesh>();

@@ -4,7 +4,7 @@
 
 class GLShader : public IShader {
 public:
-    GLShader() = default;
+    GLShader();
 
     ~GLShader() override;
 

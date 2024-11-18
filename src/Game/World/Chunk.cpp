@@ -5,9 +5,6 @@
 
 Chunk::Chunk(World *world, const int32_t x, const int32_t z) : world(world), x(x), z(z) {
     ObjectChecker::addChunk();
-    for (int32_t scy = 0; scy < NUM_SUBCHUNKS; scy++) {
-        subChunks[scy] = std::make_shared<SubChunk>(this, x, scy, z);
-    }
 }
 
 Chunk::~Chunk() {

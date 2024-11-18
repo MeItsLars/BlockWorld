@@ -136,23 +136,22 @@ void ChunkManager::generateChunk(int32_t chunkX, int32_t chunkZ) {
             chunk->transitionStateTS(C_GENERATING_INITIAL_MESH, C_RENDER_READY);
         });
 
-        // TODO: Hier gaan dingen heel erg mis lol
         // For all 4 chunks around this chunk:
         // - If the chunk is in the 'C_GENERATING_INITIAL_MESH' or 'C_RENDER_READY' state, update the mesh
         //   In all other cases, no new mesh generation is necessary
-        // for (int i = 0; i < 4; i++) {
-        //     const int32_t x = chunkX + (i == 0 ? 1 : (i == 1 ? -1 : 0));
-        //     const int32_t z = chunkZ + (i == 2 ? 1 : (i == 3 ? -1 : 0));
-        //     std::shared_ptr<Chunk> adjacentChunk = getChunk(x, z);
-        //     if (adjacentChunk != nullptr) {
-        //         ChunkState state = adjacentChunk->getStateTS();
-        //         if (state == C_GENERATING_INITIAL_MESH || state == C_RENDER_READY) {
-        //             TaskSchedulers::MESH_GEN.addTask(TaskPriority::NORMAL, [adjacentChunk] {
-        //                 adjacentChunk->updateMesh();
-        //             });
-        //         }
-        //     }
-        // }
+        for (int i = 0; i < 4; i++) {
+            const int32_t x = chunkX + (i == 0 ? 1 : (i == 1 ? -1 : 0));
+            const int32_t z = chunkZ + (i == 2 ? 1 : (i == 3 ? -1 : 0));
+            std::shared_ptr<Chunk> adjacentChunk = getChunk(x, z);
+            if (adjacentChunk != nullptr) {
+                ChunkState state = adjacentChunk->getStateTS();
+                if (state == C_GENERATING_INITIAL_MESH || state == C_RENDER_READY) {
+                    TaskSchedulers::MESH_GEN.addTask(TaskPriority::NORMAL, [adjacentChunk] {
+                        adjacentChunk->updateMesh();
+                    });
+                }
+            }
+        }
     });
 }
 

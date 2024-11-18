@@ -133,11 +133,16 @@ void GLShader::load(const ShaderProgramInfo &shaderInfo) {
     this->shaderInfo = shaderInfo;
 }
 
+GLShader::GLShader() {
+    ObjectChecker::addShader();
+}
+
 GLShader::~GLShader() {
     if (textureId != 0) {
         glDeleteTextures(1, &textureId);
     }
     glDeleteProgram(programId);
+    ObjectChecker::removeShader();
 }
 
 void GLShader::use() {

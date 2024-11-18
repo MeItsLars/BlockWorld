@@ -51,9 +51,22 @@ public:
         meshCount.operator--();
     }
 
+    static int getShaderCount() {
+        return shaderCount.load();
+    }
+
+    static void addShader() {
+        shaderCount.operator++();
+    }
+
+    static void removeShader() {
+        shaderCount.operator--();
+    }
+
 private:
     static std::atomic_int chunkCount;
     static std::atomic_int subChunkCount;
     static std::atomic_int renderableCount;
     static std::atomic_int meshCount;
+    static std::atomic_int shaderCount;
 };

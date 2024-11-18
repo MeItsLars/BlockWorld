@@ -60,6 +60,7 @@ void BlockWorldGame::run() {
         }
 
         // In case of EWindow, allow terminal input
+        // TODO: Remove this
         if (auto *eWindow = dynamic_cast<EWindow*>(window)) {
             eWindow->interactWithTerminal(world);
         }

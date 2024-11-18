@@ -221,18 +221,18 @@ void GUI::drawGUI() {
 
     if (ImGui::CollapsingHeader("Game Info", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text("FPS: %.2f", game->getFPS());
-        ImGui::Text("Memory: %lu MB", getUsedMemory() / 1024 / 1024);
+        ImGui::Text("Memory: %llu MB", getUsedMemory() / 1024 / 1024);
         std::string vsyncText = "VSync: " + std::string(game->getWindow()->isVSync() ? "On" : "Off");
         if (ImGui::Button(vsyncText.c_str())) {
             game->getWindow()->setVSync(!game->getWindow()->isVSync());
         }
-        ImGui::Text("Vertex count: %lu", game->getVertexCount());
+        ImGui::Text("Vertex count: %llu", game->getVertexCount());
     }
 
     int renderDistance = game->getActiveWorld()->getRenderDistance();
     if (ImGui::CollapsingHeader("World", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text("WSPS: %.2f", game->getActiveWorld()->getChunkManager()->getWsps());
-        ImGui::Text("Chunks loaded: %lu", game->getActiveWorld()->getChunkManager()->getActiveChunkCount());
+        ImGui::Text("Chunks loaded: %llu", game->getActiveWorld()->getChunkManager()->getActiveChunkCount());
         if (ImGui::SliderInt("Render distance", &renderDistance, 1, 76)) {
             game->getActiveWorld()->setRenderDistance(renderDistance);
         }
@@ -240,6 +240,7 @@ void GUI::drawGUI() {
         ImGui::Text("OC SubChunks Loaded: %d", ObjectChecker::getSubChunkCount());
         ImGui::Text("OC Renderables Loaded: %d", ObjectChecker::getRenderableCount());
         ImGui::Text("OC Meshes Loaded: %d", ObjectChecker::getMeshCount());
+        ImGui::Text("OC Shaders Loaded: %d", ObjectChecker::getShaderCount());
     }
 
     if (ImGui::CollapsingHeader("Player", ImGuiTreeNodeFlags_DefaultOpen)) {

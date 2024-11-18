@@ -42,7 +42,23 @@ public:
     void updateMesh();
 
     std::shared_ptr<SubChunk> getSubChunk(const int y) {
-        return y < 0 || y >= NUM_SUBCHUNKS ? nullptr : subChunks[y];
+        if (y < 0 || y >= NUM_SUBCHUNKS) {
+            return nullptr;
+        }
+        auto it = subChunks.find(y);
+        return it == subChunks.end() ? nullptr : it->second;
+    }
+
+    std::shared_ptr<SubChunk> getOrCreateSubChunk(const int y) {
+        if (y < 0 || y >= NUM_SUBCHUNKS) {
+            return nullptr;
+        }
+        std::shared_ptr<SubChunk> subChunk = getSubChunk(y);
+        if (subChunk == nullptr) {
+            subChunk = std::make_shared<SubChunk>(this, x, y, z);
+            subChunks[y] = subChunk;
+        }
+        return subChunk;
     }
 
     std::unordered_map<uint8_t, std::shared_ptr<SubChunk> > &getSubChunks() {
@@ -59,13 +75,11 @@ public:
         return it->second->getBlock(x % CHUNK_SIZE, y % CHUNK_SIZE, z % CHUNK_SIZE);
     }
 
-    bool setBlock(int x, int y, int z, BlockData block) {
-        auto it = subChunks.find(y / CHUNK_SIZE);
-        if (it == subChunks.end()) {
-            return false;
+    void setBlock(int x, int y, int z, BlockData block) {
+        std::shared_ptr<SubChunk> subChunk = getOrCreateSubChunk(y / CHUNK_SIZE);
+        if (subChunk != nullptr) {
+            subChunk->setBlock(x % CHUNK_SIZE, y % CHUNK_SIZE, z % CHUNK_SIZE, block);
         }
-        it->second->setBlock(x % CHUNK_SIZE, y % CHUNK_SIZE, z % CHUNK_SIZE, block);
-        return true;
     }
 
     ChunkState getStateTS() {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <imgui.h>
-#include <ImGuiFileDialog.h>
 
 class BlockWorldGame;
 
@@ -58,5 +57,5 @@ public:
 private:
     BlockWorldGame *game;
     ImFont *font;
-    ImGuiFileDialog fileDialog;
+    // ImGuiFileDialog fileDialog;
 };

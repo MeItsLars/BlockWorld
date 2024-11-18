@@ -49,8 +49,8 @@ include_directories(${PROJECT_SOURCE_DIR}/lib/glm)
 include_directories(${PROJECT_SOURCE_DIR}/lib/imgui-1.90)
 
 # Add ImGuiFileDialog sources from library files
-message(STATUS "Adding ImGuiFileDialog sources from lib/ImGuiFileDialog-0.6.6.1...")
-add_subdirectory(${PROJECT_SOURCE_DIR}/lib/ImGuiFileDialog-0.6.6.1)
+#message(STATUS "Adding ImGuiFileDialog sources from lib/ImGuiFileDialog-0.6.6.1...")
+#add_subdirectory(${PROJECT_SOURCE_DIR}/lib/ImGuiFileDialog-0.6.6.1)
 
 # Add CSLPQ (Priority Queue) sources from library files
 message(STATUS "Adding CSLPQ sources from lib/CSLPQ...")
@@ -74,6 +74,12 @@ add_executable(${TARGET} ${CPPS} ${IMGUI_SOURCES})
 # STAGE 2: LINKING LIBRARIES
 # Set compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -Wall -std=c++17")
+
+if(MINGW)
+    message(STATUS "Linking MinGW libraries")
+    set(CMAKE_CXX_FLAGS_DEBUG "-static-libgcc -static-libstdc++ -g")
+    set(CMAKE_CXX_FLAGS_RELEASE "-static-libgcc -static-libstdc++")
+endif()
 
 # Link OpenGL
 IF (OPENGL_FOUND)
@@ -109,8 +115,8 @@ target_include_directories(${TARGET} PRIVATE
 )
 
 # Link ImGuiFileDialog
-message(STATUS "Linking ImGuiFileDialog")
-target_link_libraries(${TARGET} ImGuiFileDialog)
+#message(STATUS "Linking ImGuiFileDialog")
+#target_link_libraries(${TARGET} ImGuiFileDialog)
 
 # Link CSLPQ
 message(STATUS "Linking CSLPQ...")
